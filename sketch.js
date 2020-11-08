@@ -1,3 +1,5 @@
+c_exp_running_mean = null;
+setTimeout(loadWasm, 3000)
 var audioContext = new AudioContext();
 let volume = 1.0;
 const alpha = 0.95;
@@ -22,8 +24,10 @@ navigator.getUserMedia({audio:true},
 function process_microphone_buffer(event) { // invoked by event loop
     var i, N, inp, microphone_output_buffer;
     microphone_output_buffer = event.inputBuffer.getChannelData(0); // just mono - 1 channel for now
-    volume = (1-alpha) * Math.max(...microphone_output_buffer) + alpha * volume;
-    // console.log(volume);
+    var newValue = Math.max(...microphone_output_buffer)
+    if(c_exp_running_mean != null){
+        volume = c_exp_running_mean(volume, newValue, alpha);
+    }
     }
 
 function start_microphone(stream){
@@ -36,9 +40,12 @@ function start_microphone(stream){
     microphone_stream.connect(script_processor_node);
 }
 
+function loadWasm(){
+    c_exp_running_mean = Module.cwrap('exp_running_mean', 'number', ['number', 'number', 'number']);
+}
 
 function setup(){
-    createCanvas(200,200);
+    createCanvas(200,200); 
 }
 
 function draw(){
