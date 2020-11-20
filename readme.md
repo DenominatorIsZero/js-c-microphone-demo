@@ -45,3 +45,9 @@ In order to get access to the microphone over the browser the site needs to supp
 > Follow these instructions: https://gist.github.com/prof3ssorSt3v3/edb2632a362b3731274cfab84e9973f9
 >
 > You can get openssl via cygwin. Just follow these instructions: https://stackoverflow.com/a/62982416
+
+## Git
+
+We will be using git for version control.
+
+> download: https://git-scm.com/downloads
